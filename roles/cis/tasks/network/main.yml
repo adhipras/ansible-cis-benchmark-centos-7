@@ -1,0 +1,4 @@
+---
+- name: 3.1. Disable Unused Network Protocols and Devices
+  include_tasks: protocols.yml
+  tags: "3.1"
