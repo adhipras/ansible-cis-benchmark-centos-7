@@ -2,7 +2,7 @@
 - name: Ensuring core dumps are restricted
   sysctl:
     name: fs.suid_dumpable
-    value: "0"
+    value: '0'
     state: present
     reload: yes
   tags:
@@ -14,7 +14,7 @@
     domain: "*"
     limit_type: hard
     limit_item: core
-    value: "0"
+    value: 0
   tags:
     - "1.6.1"
 
@@ -22,7 +22,7 @@
   sysctl:
     ignoreerrors: yes
     name: fs.suid_dumpable
-    value: 0
+    value: '0'
     state: present
   tags:
     - "1.6.1"
@@ -33,7 +33,7 @@
   sysctl:
     ignoreerrors: yes
     name: kernel.randomize_va_space
-    value: 2
+    value: '2'
     state: present
   tags:
     - "1.6.3"
