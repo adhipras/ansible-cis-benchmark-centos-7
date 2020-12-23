@@ -32,7 +32,7 @@
 
 # Section 2.2.1.3 Ensure ntp is configured, skipped.
 
-- name: Ensuring unnecessary packages are not installed
+- name: Ensuring unnecessary service servers are not installed
   package:
     name:
       - 'xorg-x11-server*'
