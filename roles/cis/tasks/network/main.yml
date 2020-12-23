@@ -2,3 +2,7 @@
 - name: 3.1. Disable Unused Network Protocols and Devices
   include_tasks: protocols.yml
   tags: "3.1"
+
+- name: 3.2. Network Parameters (Host Only)
+  include_tasks: host.yml
+  tags: "3.2"

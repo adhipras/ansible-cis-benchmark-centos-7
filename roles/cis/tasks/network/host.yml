@@ -1,0 +1,26 @@
+---
+- name: Ensuring IP forwarding is disabled
+  sysctl:
+    ignoreerrors: yes
+    name: net.ipv4.ip_forward
+    value: '0'
+    state: present
+  tags:
+    - "3.2.1"
+
+- name: Ensuring packet redirect sending is disabled
+  sysctl:
+    ignoreerrors: yes
+    name: "{{ item }}"
+    value: '0'
+    state: present
+  with_items:
+    - net.ipv4.conf.all.send_redirects
+    - net.ipv4.conf.default.send_redirects
+  tags:
+    - "3.2.2"
+
+- name: Flushing the routing table
+  command: sysctl -w net.ipv4.route.flush=1
+  tags:
+    - "3.2.2"
