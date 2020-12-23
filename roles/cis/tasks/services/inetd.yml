@@ -1,0 +1,7 @@
+---
+- name: Ensuring xinetd is not installed
+  package:
+    name: xinetd
+    state: absent
+  tags:
+    - "2.1.1"
