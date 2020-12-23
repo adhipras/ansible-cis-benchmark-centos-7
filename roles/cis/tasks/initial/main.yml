@@ -37,7 +37,7 @@
     state: latest
   tags: "1.9"
 
-- name: 1.10. GDM
+- name: 1.10. GNOME Display Manager
   package:
     name: gdm
     state: absent
