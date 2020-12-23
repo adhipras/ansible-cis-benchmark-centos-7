@@ -1,0 +1,11 @@
+---
+- name: Disabling DCCP and SCTP
+  copy:
+    dest: "/etc/modprobe.d/{{ item }}.conf"
+    content: "install {{ item }} /bin/true"
+  with_items:
+    - dccp
+    - sctp
+  tags:
+    - "3.4.1"
+    - "3.4.2"
