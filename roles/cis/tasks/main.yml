@@ -11,3 +11,7 @@
 - name: 2. Services
   include_tasks: services/main.yml
   tags: services
+
+- name: 3. Network Configuration
+  include_tasks: network/main.yml
+  tags: network
