@@ -1,0 +1,9 @@
+---
+################################################################################
+# The Center for Internet Security (CIS) Benchmarks for CentOS Linux 7 v3.0.0
+# https://www.cisecurity.org/benchmark/centos_linux/
+################################################################################
+
+- name: 1. Initial Setup
+  include_tasks: initial/main.yml
+  tags: initial
