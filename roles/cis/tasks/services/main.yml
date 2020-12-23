@@ -1,12 +1,12 @@
 ---
-- name: 2.1 inetd Services
+- name: 2.1. inetd Services
   include_tasks: inetd.yml
   tags: "2.1"
 
-- name: 2.2 Special Purpose Services
+- name: 2.2. Special Purpose Services
   include_tasks: special.yml
   tags: "2.2"
 
-- name: 2.3 Service Clients
+- name: 2.3. Service Clients
   include_tasks: clients.yml
   tags: "2.3"
