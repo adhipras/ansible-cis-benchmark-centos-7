@@ -1,0 +1,26 @@
+---
+# Section 1.5.1 Ensuring bootloader password is set, skipped.
+
+- name: Ensuring permissions on bootloader configuration files are set properly
+  file:
+    path: "{{ item }}"
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - /boot/grub2/grub.cfg
+    - /boot/grub2/user.cfg
+  tags:
+    - "1.5.2"
+
+- name: Ensuring authentication required for single user mode
+  replace:
+    dest: /usr/lib/systemd/system/{{ item }}.service
+    regexp: '^ExecStart=-((?!/usr/lib/systemd/systemd-sulogin-shell).)*$'
+    replace: "ExecStart=-/usr/lib/systemd/systemd-sulogin-shell {{ item }}"
+  with_items:
+    - rescue
+    - emergency
+  tags:
+    - "1.5.3"

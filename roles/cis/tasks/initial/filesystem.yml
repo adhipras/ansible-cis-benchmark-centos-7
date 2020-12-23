@@ -1,0 +1,299 @@
+---
+- name: Disabling unused filesystems
+  copy:
+    dest: "/etc/modprobe.d/{{ item }}.conf"
+    content: "install {{ item }} /bin/true"
+  with_items:
+    - cramfs
+    - squashfs
+    - udf
+    - fat
+    - vfat
+    - msdos
+    - usb-storage
+  tags:
+    - "1.1.1"
+    - "1.1.1.1"
+    - "1.1.1.2"
+    - "1.1.1.3"
+    - "1.1.1.4"
+    - "1.1.24"
+
+- name: Unloading kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: absent
+  with_items:
+    - cramfs
+    - squashfs
+    - udf
+    - fat
+    - vfat
+    - msdos
+    - usb-storage
+  tags:
+    - "1.1.1"
+    - "1.1.1.1"
+    - "1.1.1.2"
+    - "1.1.1.3"
+    - "1.1.1.4"
+    - "1.1.24"
+
+- name: Copying tmp.mount file
+  copy:
+    src: "{{ role_path }}/files/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}/etc/systemd/system/tmp.mount"
+    dest: /etc/systemd/system/tmp.mount
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - "1.1.2"
+    - "1.1.3"
+    - "1.1.4"
+    - "1.1.5"
+
+- name: Unmasking, restarting, and enabling systemd /tmp partition mounting
+  systemd:
+    name: tmp.mount
+    masked: no
+    state: restarted
+    enabled: yes
+    daemon_reload: yes
+  tags:
+    - "1.1.2"
+    - "1.1.3"
+    - "1.1.4"
+    - "1.1.5"
+
+- name: Auditing nodev option on /dev/shm mount point
+  shell: >
+    cat /proc/mounts
+    | /usr/bin/grep /dev/shm
+    | /usr/bin/grep -v nodev
+  register: dev_shm_nodev_out
+  failed_when: dev_shm_nodev_out == "2"
+  changed_when: false
+  tags:
+    - "1.1.15"
+
+- name: Reporting audit result of nodev option setting on /dev/shm mount point
+  debug:
+    msg: "[WARNING] nodev option is not set on /dev/shm mount point"
+  when: dev_shm_nodev_out is defined and dev_shm_nodev_out.stdout
+  changed_when: true
+  tags:
+    - "1.1.15"
+
+- name: Auditing nosuid option on /dev/shm mount point
+  shell: >
+    cat /proc/mounts
+    | /usr/bin/grep /dev/shm
+    | /usr/bin/grep -v nosuid
+  register: dev_shm_nosuid_out
+  failed_when: dev_shm_nosuid_out == "2"
+  changed_when: false
+  tags:
+    - "1.1.16"
+
+- name: Reporting audit result of nosuid option setting on /dev/shm mount point
+  debug:
+    msg: "[WARNING] nosuid option is not set on /dev/shm mount point"
+  when: dev_shm_nosuid_out is defined and dev_shm_nosuid_out.stdout
+  changed_when: true
+  tags:
+    - "1.1.16"
+
+- name: Auditing noexec option on /dev/shm mount point
+  shell: >
+    cat /proc/mounts
+    | /usr/bin/grep /dev/shm
+    | /usr/bin/grep -v noexec
+  register: dev_shm_noexec_out
+  failed_when: dev_shm_noexec_out == "2"
+  changed_when: false
+  tags:
+    - "1.1.17"
+
+- name: Reporting audit result of noexec option setting on /dev/shm mount point
+  debug:
+    msg: "[WARNING] noexec option is not set on /dev/shm mount point"
+  when: dev_shm_noexec_out is defined and dev_shm_noexec_out.stdout
+  changed_when: true
+  tags:
+    - "1.1.17"
+
+- name: Setting mount point counter for /var partition audit
+  set_fact:
+    mount_count: 0
+  tags:
+    - "1.1.10"
+
+- name: Auditing /var partition
+  set_fact:
+    mount_count: "addition{{ mount_count + 1 }}"
+  when: item.mount == "/var"
+  with_items:
+    - "{{ ansible_mounts }}"
+  tags:
+    - "1.1.10"
+
+- name: Reporting audit result of /var partition
+  debug:
+    msg: "[WARNING] Separate partition for /var does not exist"
+  when: mount_count == 0
+  changed_when: true
+  tags:
+    - "1.1.10"
+
+- name: Resetting mount point counter for /var/tmp partition audit
+  set_fact:
+    mount_count: 0
+  tags:
+    - "1.1.11"
+
+- name: Auditing /var/tmp partition
+  set_fact:
+    mount_count: "addition{{ mount_count + 1 }}"
+    mount_options: "{{ item.options }}"
+  when: item.mount == "/var/tmp"
+  with_items:
+    - "{{ ansible_mounts }}"
+  tags:
+    - "1.1.11"
+
+- name: Reporting audit result of noexec option setting on /var/tmp partition
+  debug:
+    msg: "[WARNING] noexec option is not set on /var/tmp partition"
+  when: mount_count == 1 and mount_options is defined and "noexec" not in mount_options
+  changed_when: true
+  tags:
+    - "1.1.12"
+
+- name: Reporting audit result of /var/tmp partition
+  debug:
+    msg: "[WARNING] Separate partition for /var/tmp does not exist"
+  when: mount_count == 0
+  changed_when: true
+  tags:
+    - "1.1.11"
+
+- name: Reporting audit result of nodev option setting on /var/tmp partition
+  debug:
+    msg: "[WARNING] nodev option is not set on /var/tmp partition"
+  when: mount_count == 1 and mount_options is defined and "nodev" not in mount_options
+  changed_when: true
+  tags:
+    - "1.1.13"
+
+- name: Reporting audit result of nosuid option setting on /var/tmp partition
+  debug:
+    msg: "[WARNING] nosuid option is not set on /var/tmp partition"
+  when: mount_count == 1 and mount_options is defined and "nosuid" not in mount_options
+  changed_when: true
+  tags:
+    - "1.1.14"
+
+- name: Resetting mount point counter for /var/log partition
+  set_fact:
+    mount_count: 0
+  tags:
+    - "1.1.15"
+
+- name: Auditing /var/log partition
+  set_fact:
+    mount_count: "addition{{ mount_count + 1 }}"
+  when: item.mount == "/var/log"
+  with_items:
+    - "{{ ansible_mounts }}"
+  tags:
+    - "1.1.15"
+
+- name: Reporting audit result of /var/log partition
+  debug:
+    msg: "[WARNING] Separate partition for /var/log does not exist"
+  when: mount_count == 0
+  changed_when: true
+  tags:
+    - "1.1.15"
+
+- name: Resetting mount point counter for /var/log/audit partition audit
+  set_fact:
+    mount_count: 0
+  tags:
+    - "1.1.16"
+
+- name: Auditing /var/log/audit partition
+  set_fact:
+    mount_count: "addition{{ mount_count + 1 }}"
+  when: item.mount == "/var/log/audit"
+  with_items:
+    - "{{ ansible_mounts }}"
+  tags:
+    - "1.1.16"
+
+- name: Reporting audit result of /var/log/audit partition
+  debug:
+    msg: "[WARNING] Separate partition for /var/log/audit does not exist"
+  when: mount_count == 0
+  changed_when: true
+  tags:
+    - "1.1.16"
+
+- name: Resetting mount point counter for /home partition audit
+  set_fact:
+    mount_count: 0
+  tags:
+    - "1.1.17"
+
+- name: Auditing /home partition
+  set_fact:
+    mount_count: "addition{{ mount_count + 1 }}"
+    mount_options: "{{ item.options }}"
+  when: item.mount == "/home"
+  with_items:
+    - "{{ ansible_mounts }}"
+  tags:
+    - "1.1.17"
+
+- name: Reporting audit result of /home partition
+  debug:
+    msg: "[WARNING] Separate partition for /home does not exist"
+  when: mount_count == 0
+  changed_when: true
+  tags:
+    - "1.1.17"
+
+- name: Reporting audit result of nodev option setting on /home partition
+  debug:
+    msg: "[WARNING] nodev option is not set on /home partition"
+  when: mount_count == 1 and mount_options is defined and "nodev" not in mount_options
+  changed_when: true
+  tags:
+    - "1.1.18"
+
+# Section 1.1.19, 1.1.20, and 1.1.21 are for removable media partitions, skipped.
+
+- name: Ensuring sticky bit is set
+  become_user: root
+  shell: >
+    df --local -P
+    | awk '{if (NR!=1) print $6}'
+    | xargs -I '{}' find '{}' -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
+    | xargs -I '{}' chmod a+t '{}'
+  tags:
+    - "1.1.22"
+
+- name: Getting installed packages list
+  package_facts:
+    manager: rpm
+  tags:
+    - "1.1.23"
+
+- name: Disabling automounting
+  service:
+    name: autofs
+    enabled: no
+    state: stopped
+  when: "'autofs' in ansible_facts.packages"
+  tags:
+    - "1.1.23"

@@ -1,0 +1,28 @@
+---
+- name: Getting all YUM repository files
+  find:
+    path: /etc/yum.repos.d
+    patterns: '*.repo'
+    excludes: 'CentOS-Vault.repo'
+  register: yum_repo
+  tags:
+    - "1.2.2"
+
+- name: Ensuring GPG checking is activated in YUM repository files
+  lineinfile:
+    path: "{{ item.path }}"
+    create: false
+    regexp: gpgcheck=
+    line: gpgcheck=1
+  with_items: "{{ yum_repo.files }}"
+  tags:
+    - "1.2.2"
+
+- name: Ensuring GPG checking is activated in YUM configuration file
+  lineinfile:
+    path: /etc/yum.conf
+    create: false
+    regexp: gpgcheck=
+    line: gpgcheck=1
+  tags:
+    - "1.2.2"

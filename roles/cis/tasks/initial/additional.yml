@@ -1,0 +1,46 @@
+---
+- name: Ensuring core dumps are restricted
+  sysctl:
+    name: fs.suid_dumpable
+    value: "0"
+    state: present
+    reload: yes
+  tags:
+    - "1.6.1"
+
+- name: Ensuring core dumps hard limit are set
+  pam_limits:
+    dest: /etc/security/limits.d/core-dumps.conf
+    domain: "*"
+    limit_type: hard
+    limit_item: core
+    value: "0"
+  tags:
+    - "1.6.1"
+
+- name: Preventing setuid programs from dumping core
+  sysctl:
+    ignoreerrors: yes
+    name: fs.suid_dumpable
+    value: 0
+    state: present
+  tags:
+    - "1.6.1"
+
+# Section 1.6.2 Ensure XD/NX support is enabled, skipped.
+
+- name: Ensuring ASLR is enabled
+  sysctl:
+    ignoreerrors: yes
+    name: kernel.randomize_va_space
+    value: 2
+    state: present
+  tags:
+    - "1.6.3"
+
+- name: Ensuring prelink is not installed
+  package:
+    name: prelink
+    state: absent
+  tags:
+    - "1.6.4"

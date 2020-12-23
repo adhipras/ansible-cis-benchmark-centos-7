@@ -1,0 +1,27 @@
+---
+- name: Ensuring sudo is installed
+  package:
+    name: sudo
+    state: present
+  tags:
+    - "1.3.1"
+
+- name: Ensuring sudo command use pseudo-pty
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^Defaults\s*use_pty'
+    line: "Defaults use_pty"
+    insertafter: "^# Defaults specification"
+    validate: /usr/sbin/visudo -cf %s
+  tags:
+    - "1.3.2"
+
+- name: Ensuring sudo log file exists
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '^Defaults\s*logfile="/var/log/sudo.log"'
+    line: 'Defaults logfile="/var/log/sudo.log"'
+    insertafter: "^# Defaults specification"
+    validate: /usr/sbin/visudo -cf %s
+  tags:
+    - "1.3.3"

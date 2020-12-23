@@ -1,0 +1,33 @@
+---
+- name: Ensuring AIDE is installed
+  package:
+    name: aide
+    state: present
+  tags:
+    - "1.4.1"
+
+- name: Initializing AIDE
+  become_user: root
+  command: aide --init
+  tags:
+    - "1.4.1"
+
+- name: Copying AIDE database file
+  copy:
+    remote_src: yes
+    src: /var/lib/aide/aide.db.new.gz
+    dest: /var/lib/aide/aide.db.gz
+    mode: preserve
+  tags:
+    - "1.4.1"
+
+- name: Creating a cron file for AIDE job
+  cron:
+    name: "AIDE Check"
+    user: root
+    hour: "5"
+    minute: "0"
+    job: "/usr/sbin/aide --check"
+    cron_file: aidecheck
+  tags:
+    - "1.4.2"
