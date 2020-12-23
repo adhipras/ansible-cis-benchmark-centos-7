@@ -6,3 +6,7 @@
 - name: 3.2. Network Parameters (Host Only)
   include_tasks: host.yml
   tags: "3.2"
+
+- name: 3.3. Network Parameters (Host and Router)
+  include_tasks: router.yml
+  tags: "3.3"

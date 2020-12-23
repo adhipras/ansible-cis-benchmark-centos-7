@@ -1,0 +1,101 @@
+---
+- name: Ensuring source routed packets are not accepted
+  sysctl:
+    ignoreerrors: yes
+    name: "{{ item }}"
+    value: '0'
+    state: present
+  with_items:
+    - net.ipv4.conf.all.accept_source_route
+    - net.ipv4.conf.default.accept_source_route
+  tags:
+    - "3.3.1"
+
+- name: Ensuring ICMP redirects are not accepted
+  sysctl:
+    ignoreerrors: yes
+    name: "{{ item }}"
+    value: '0'
+    state: present
+  with_items:
+    - net.ipv4.conf.all.accept_redirects
+    - net.ipv4.conf.default.accept_redirects
+  tags:
+    - "3.3.2"
+
+- name: Ensuring secure ICMP redirects are not accepted
+  sysctl:
+    ignoreerrors: yes
+    name: "{{ item }}"
+    value: '0'
+    state: present
+  with_items:
+    - net.ipv4.conf.all.secure_redirects
+    - net.ipv4.conf.default.secure_redirects
+  tags:
+    - "3.3.3"
+
+- name: Ensuring suspicious packets are logged
+  sysctl:
+    ignoreerrors: yes
+    name: "{{ item }}"
+    value: '1'
+    state: present
+  with_items:
+    - net.ipv4.conf.all.log_martians
+    - net.ipv4.conf.default.log_martians
+  tags:
+    - "3.3.4"
+
+- name: Ensuring broadcast ICMP requests are ignored
+  sysctl:
+    ignoreerrors: yes
+    name: net.ipv4.icmp_echo_ignore_broadcasts
+    value: '1'
+    state: present
+  tags:
+    - "3.3.5"
+
+- name: Ensuring bogus ICMP responses are ignored
+  sysctl:
+    ignoreerrors: yes
+    name: net.ipv4.icmp_ignore_bogus_error_responses
+    value: '1'
+    state: present
+  tags:
+    - "3.3.6"
+
+- name: Ensuring Reverse Path Filtering is enabled
+  sysctl:
+    ignoreerrors: yes
+    name: "{{ item }}"
+    value: '1'
+    state: present
+  with_items:
+    - net.ipv4.conf.all.rp_filter
+    - net.ipv4.conf.default.rp_filter
+  tags:
+    - "3.3.7"
+
+- name: Ensuring TCP SYN Cookies is enabled
+  sysctl:
+    ignoreerrors: yes
+    name: net.ipv4.tcp_syncookies
+    value: '1'
+    state: present
+  tags:
+    - "3.3.8"
+
+- name: Flushing the routing table
+  command: sysctl -w net.ipv4.route.flush=1
+  tags:
+    - "3.3.1"
+    - "3.3.2"
+    - "3.3.3"
+    - "3.3.4"
+    - "3.3.5"
+    - "3.3.6"
+    - "3.3.7"
+    - "3.3.8"
+
+# Section 3.3.9 Ensure IPv6 router advertisements are not accepted, skipped.
