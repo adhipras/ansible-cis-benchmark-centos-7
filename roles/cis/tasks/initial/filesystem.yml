@@ -41,7 +41,7 @@
 
 - name: Copying tmp.mount file
   copy:
-    src: "{{ role_path }}/files/{{ ansible_distribution | lower }}/{{ ansible_distribution_major_version }}/etc/systemd/system/tmp.mount"
+    src: "{{ role_path }}/files/etc/systemd/system/tmp.mount"
     dest: /etc/systemd/system/tmp.mount
     owner: root
     group: root
@@ -283,7 +283,7 @@
   tags:
     - "1.1.22"
 
-- name: Getting installed packages list
+- name: Getting the list of installed packages
   package_facts:
     manager: rpm
   tags:
