@@ -44,7 +44,7 @@ Vagrant.configure("2") do |config|
 
   # Enable provisioning with Ansible playbook.
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "provision.yml"
+    ansible.playbook = "playbook.yml"
     ansible.groups = {
       "virtualbox" => ["centos"]
     }
