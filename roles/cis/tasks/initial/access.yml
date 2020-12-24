@@ -7,7 +7,29 @@
     - "1.7.1"
     - "1.7.1.1"
 
-# Section 1.7.1.2 Ensure SELinux is not disabled in bootloader configuration, skipped.
+- name: Ensuring bootup text is not desplayed
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: GRUB_CMDLINE_LINUX_DEFAULT="quiet"
+  tags:
+    - "1.7.1"
+    - "1.7.1.2"
+
+- name: Ensuring SELinux is not disabled in bootloader configuration
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX="
+    line: GRUB_CMDLINE_LINUX=""
+  tags:
+    - "1.7.1"
+    - "1.7.1.2"
+
+- name: Updating GRUB2 configuration
+  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  tags:
+    - "1.7.1"
+    - "1.7.1.2"
 
 - name: Ensuring SELinux mode is enforcing
   selinux:
