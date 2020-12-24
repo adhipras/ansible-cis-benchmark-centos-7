@@ -1,0 +1,46 @@
+---
+- name: Ensuring FirewallD is installed
+  package:
+    name:
+      - firewalld
+      - iptables
+    state: present
+  tags:
+    - "3.5.1"
+    - "3.5.1.1"
+
+- name: Ensuring iptables-services package is not installed
+  package:
+    name: iptables-services
+    state: absent
+  tags:
+    - "3.5.1"
+    - "3.5.1.2"
+
+- name: Ensuring nftables is not installed
+  package:
+    name: nftables
+    state: absent
+  tags:
+    - "3.5.1"
+    - "3.5.1.3"
+
+- name: Ensuring firewalld service is enabled and running
+  service:
+    name: firewalld
+    state: started
+    enabled: yes
+  tags:
+    - "3.5.1"
+    - "3.5.1.4"
+
+- name: Ensuring the default zone is set
+  command: firewall-cmd --set-default-zone=public
+  tags:
+    - "3.5.1"
+    - "3.5.1.5"
+
+# Section 3.5.1.6 Ensure network interfaces are assigned to appropriate zone, skipped.
+# Section 3.5.1.7 Ensure unnecessary services and ports are not accepted, skipped.
+# Section 3.5.2 Configure nftables, skipped.
+# Section 3.5.3 Configure iptables, skipped.

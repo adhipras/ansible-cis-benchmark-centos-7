@@ -14,3 +14,7 @@
 - name: 3.4. Uncommon Network Protocols
   include_tasks: uncommon.yml
   tags: "3.4"
+
+- name: 3.5. Firewall Configuration
+  include_tasks: firewall.yml
+  tags: "3.5"
