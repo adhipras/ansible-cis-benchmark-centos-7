@@ -1,0 +1,105 @@
+---
+- name: Ensuring auditd is installed
+  package:
+    name:
+      - audit
+      - audit-libs
+    state: present
+  tags:
+    - "4.1.1"
+    - "4.1.1.1"
+
+- name: Ensuring auditd service is enabled and running
+  service:
+    name: auditd
+    state: started
+    enabled: yes
+  tags:
+    - "4.1.1"
+    - "4.1.1.2"
+
+# Section 4.1.2.1 Ensure audit log storage size is configured, skipped.
+
+- name: Configuring auditd daemon
+  lineinfile:
+    path: /etc/audit/auditd.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - regexp: "^max_log_file_action ="
+      line: max_log_file_action = keep_logs
+    - regexp: "^space_left_action ="
+      line: space_left_action = email
+    - regexp: "^admin_space_left_action ="
+      line: admin_space_left_action = halt
+  tags:
+    - "4.1.2"
+    - "4.1.2.2"
+    - "4.1.2.3"
+
+- name: Configuring GRUB2
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX="
+    line: GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192"
+  tags:
+    - "4.1.1"
+    - "4.1.1.3"
+    - "4.1.2"
+    - "4.1.2.4"
+
+- name: Updating GRUB2 configuration
+  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  tags:
+    - "4.1.1"
+    - "4.1.1.3"
+    - "4.1.2"
+    - "4.1.2.4"
+
+- name: Ensuring events that modify the system are collected
+  copy:
+    src: "{{ role_path }}/files/etc/audit/rules.d/{{ item }}.rules"
+    dest: "/etc/audit/rules.d/{{ item }}.rules"
+    owner: root
+    group: root
+    mode: 0600
+  with_items:
+    - time-change
+    - identity
+    - system-locale
+    - mac-policy
+    - logins
+    - session
+    - perm-mod
+    - access
+    - mounts
+    - deletion
+    - scope
+    - actions
+    - modules
+  tags:
+    - "4.1.3"
+    - "4.1.4"
+    - "4.1.5"
+    - "4.1.6"
+    - "4.1.7"
+    - "4.1.8"
+    - "4.1.9"
+    - "4.1.10"
+    - "4.1.12"
+    - "4.1.13"
+    - "4.1.14"
+    - "4.1.15"
+    - "4.1.16"
+
+# Section 4.1.11 Ensure use of privileged commands is collected, skipped.
+
+- name: Ensuring the audit configuration is immutable
+  copy:
+    content: '-e 2'
+    dest: /etc/audit/rules.d/99-finalize.rules
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - "4.1.17"
