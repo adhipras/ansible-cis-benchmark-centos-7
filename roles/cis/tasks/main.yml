@@ -15,3 +15,7 @@
 - name: 3. Network Configuration
   include_tasks: network/main.yml
   tags: network
+
+- name: 4. Logging and Auditing
+  include_tasks: logging/main.yml
+  tags: logging
