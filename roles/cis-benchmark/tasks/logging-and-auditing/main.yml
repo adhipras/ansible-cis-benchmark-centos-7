@@ -2,3 +2,5 @@
 - name: 4.1. Configure System Accounting (auditd)
   include_tasks: configure-system-accounting-auditd.yml
   tags: "4.1"
+
+# Section 4.2 Configure Logging, skipped.
