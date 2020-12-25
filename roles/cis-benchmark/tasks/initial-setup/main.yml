@@ -1,34 +1,34 @@
 ---
 - name: 1.1. Filesystem Configuration
-  include_tasks: filesystem.yml
+  include_tasks: filesystem-configuration.yml
   tags: "1.1"
 
 - name: 1.2. Configure Software Updates
-  include_tasks: updates.yml
+  include_tasks: configure-software-updates.yml
   tags: "1.2"
 
 - name: 1.3. Configure Sudo
-  include_tasks: sudo.yml
+  include_tasks: configure-sudo.yml
   tags: "1.3"
 
 - name: 1.4. Filesystem Integrity Checking
-  include_tasks: integrity.yml
+  include_tasks: filesystem-integrity-checking.yml
   tags: "1.4"
 
 - name: 1.5. Secure Boot Settings
-  include_tasks: boot.yml
+  include_tasks: secure-boot-settings.yml
   tags: "1.5"
 
 - name: 1.6. Additional Process Hardening
-  include_tasks: additional.yml
+  include_tasks: additional-process-hardening.yml
   tags: "1.6"
 
 - name: 1.7. Mandatory Access Control
-  include_tasks: access.yml
+  include_tasks: mandatory-access-control.yml
   tags: "1.7"
 
 - name: 1.8. Warning Banners
-  include_tasks: banners.yml
+  include_tasks: warning-banners.yml
   tags: "1.8"
 
 - name: 1.9. Package Updates and Patches
