@@ -1,20 +1,20 @@
 ---
 - name: 3.1. Disable Unused Network Protocols and Devices
-  include_tasks: protocols.yml
+  include_tasks: unused-network-protocols-and-devices.yml
   tags: "3.1"
 
 - name: 3.2. Network Parameters (Host Only)
-  include_tasks: host.yml
+  include_tasks: network-parameters-host-only.yml
   tags: "3.2"
 
 - name: 3.3. Network Parameters (Host and Router)
-  include_tasks: router.yml
+  include_tasks: network-parameters-host-and-router.yml
   tags: "3.3"
 
 - name: 3.4. Uncommon Network Protocols
-  include_tasks: uncommon.yml
+  include_tasks: uncommon-network-protocols.yml
   tags: "3.4"
 
 - name: 3.5. Firewall Configuration
-  include_tasks: firewall.yml
+  include_tasks: firewall-configuration.yml
   tags: "3.5"
