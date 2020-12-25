@@ -5,17 +5,17 @@
 ################################################################################
 
 - name: 1. Initial Setup
-  include_tasks: initial/main.yml
-  tags: initial
+  include_tasks: initial-setup/main.yml
+  tags: "1"
 
 - name: 2. Services
   include_tasks: services/main.yml
-  tags: services
+  tags: "2"
 
 - name: 3. Network Configuration
-  include_tasks: network/main.yml
-  tags: network
+  include_tasks: network-configuration/main.yml
+  tags: "3"
 
 - name: 4. Logging and Auditing
-  include_tasks: logging/main.yml
-  tags: logging
+  include_tasks: logging-and-auditing/main.yml
+  tags: "4"
