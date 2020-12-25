@@ -52,7 +52,7 @@
     - "1.1.4"
     - "1.1.5"
 
-- name: Unmasking, restarting, and enabling systemd /tmp partition mounting
+- name: Restarting systemd /tmp partition mounting
   systemd:
     name: tmp.mount
     masked: no
