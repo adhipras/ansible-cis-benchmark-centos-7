@@ -19,3 +19,7 @@
 - name: 4. Logging and Auditing
   include_tasks: logging-and-auditing/main.yml
   tags: "4"
+
+- name: 5. Access, Authentication, and Authorization
+  include_tasks: access-authentication-and-authorization/main.yml
+  tags: "5"
