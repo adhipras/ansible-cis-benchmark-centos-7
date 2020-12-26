@@ -1,1 +1,4 @@
 ---
+- name: 5.1. Configure Time-Based Job Schedulers
+  include_tasks: configure-time-based-job-schedulers.yml
+  tags: "5.1"

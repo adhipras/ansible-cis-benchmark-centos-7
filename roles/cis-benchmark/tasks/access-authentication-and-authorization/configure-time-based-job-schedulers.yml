@@ -1,0 +1,73 @@
+---
+- name: Ensuring cron daemon is enabled and running
+  service:
+    name: crond
+    state: started
+    enabled: yes
+  tags:
+    - "5.1.1"
+
+- name: Ensuring permissions on /etc/crontab are configured
+  file:
+    path: /etc/crontab
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - "5.1.2"
+
+- name: Ensuring permissions on cron directories are configured
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+    recurse: yes
+  with_items:
+    - /etc/cron.hourly
+    - /etc/cron.daily
+    - /etc/cron.weekly
+    - /etc/cron.monthly
+    - /etc/cron.d
+  tags:
+    - "5.1.3"
+    - "5.1.4"
+    - "5.1.5"
+    - "5.1.6"
+    - "5.1.7"
+
+- name: Removing /etc/cron.deny file
+  file:
+    path: /etc/cron.deny
+    state: absent
+  tags:
+    - "5.1.8"
+
+- name: Creating /etc/cron.allow file
+  file:
+    path: /etc/cron.allow
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - "5.1.8"
+
+- name: Removing /etc/at.deny file
+  file:
+    path: /etc/at.deny
+    state: absent
+  tags:
+    - "5.1.9"
+
+- name: Creating /etc/at.allow file
+  file:
+    path: /etc/at.allow
+    state: touch
+    owner: root
+    group: root
+    mode: 0600
+  tags:
+    - "5.1.9"
