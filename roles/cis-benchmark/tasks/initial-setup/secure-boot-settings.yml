@@ -4,7 +4,7 @@
 - name: Ensuring permissions on bootloader configuration files are set properly
   file:
     path: "{{ item }}"
-    state: touch
+    state: file
     owner: root
     group: root
     mode: 0600
