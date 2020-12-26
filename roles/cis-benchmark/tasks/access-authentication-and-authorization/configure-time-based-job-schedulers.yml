@@ -10,7 +10,7 @@
 - name: Ensuring permissions on /etc/crontab are configured
   file:
     path: /etc/crontab
-    state: touch
+    state: file
     owner: root
     group: root
     mode: 0600
