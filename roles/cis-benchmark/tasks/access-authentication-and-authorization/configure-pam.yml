@@ -1,0 +1,66 @@
+---
+- name: Ensuring password creation requirements are configured
+  lineinfile:
+    path: /etc/security/pwquality.conf
+    create: false
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - regexp: '^# minlen'
+      line: minlen = 14
+    - regexp: '^# minclass'
+      line: minclass = 4
+  tags:
+    - "5.3.1"
+
+- name: Ensuring lockout for failed password attempts is configured
+  lineinfile:
+    path: "{{ item }}"
+    create: false
+    regexp: '^auth        required      pam_faillock.so'
+    insertafter: '^auth        required      pam_env.so'
+    line: 'auth        required      pam_faillock.so preauth silent audit deny=5 unlock_time=900'
+  with_items:
+    - /etc/pam.d/system-auth
+    - /etc/pam.d/password-auth
+  tags:
+    - "5.3.2"
+
+- name: Ensuring lockout for failed password attempts is configured (cont'd)
+  lineinfile:
+    path: "{{ item }}"
+    create: false
+    regexp: '^auth        \[default=die\] pam_faillock.so'
+    insertbefore: '^auth        requisite     pam_succeed_if.so(.*)$'
+    line: 'auth        [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900'
+  with_items:
+    - /etc/pam.d/system-auth
+    - /etc/pam.d/password-auth
+  tags:
+    - "5.3.2"
+
+- name: Ensuring lockout for failed password attempts is configured (cont'd)
+  lineinfile:
+    path: "{{ item }}"
+    create: false
+    regexp: '^account     required      pam_faillock.so'
+    insertbefore: '^account     required      pam_unix.so'
+    line: 'account     required      pam_faillock.so'
+  with_items:
+    - /etc/pam.d/system-auth
+    - /etc/pam.d/password-auth
+  tags:
+    - "5.3.2"
+
+- name: Ensuring password hashing algorithm and password reuse are configured properly
+  lineinfile:
+    path: "{{ item }}"
+    create: false
+    regexp: '^password    sufficient    pam_unix.so(.*)$'
+    line: 'password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass remember=5 use_authtok'
+  with_items:
+    - /etc/pam.d/password-auth
+    - /etc/pam.d/system-auth
+  tags:
+    - "5.3.3"
+    - "5.3.4"
