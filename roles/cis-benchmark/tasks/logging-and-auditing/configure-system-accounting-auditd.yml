@@ -26,12 +26,12 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   with_items:
-    - regexp: "^max_log_file_action ="
-      line: max_log_file_action = keep_logs
-    - regexp: "^space_left_action ="
-      line: space_left_action = email
-    - regexp: "^admin_space_left_action ="
-      line: admin_space_left_action = halt
+    - regexp: '^max_log_file_action ='
+      line: 'max_log_file_action = keep_logs'
+    - regexp: '^space_left_action ='
+      line: 'space_left_action = email'
+    - regexp: '^admin_space_left_action ='
+      line: 'admin_space_left_action = halt'
   tags:
     - "4.1.2"
     - "4.1.2.2"
@@ -40,8 +40,8 @@
 - name: Configuring GRUB2
   lineinfile:
     path: /etc/default/grub
-    regexp: "^GRUB_CMDLINE_LINUX="
-    line: GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192"
+    regexp: '^GRUB_CMDLINE_LINUX='
+    line: 'GRUB_CMDLINE_LINUX="audit=1 audit_backlog_limit=8192"'
   tags:
     - "4.1.1"
     - "4.1.1.3"

@@ -12,8 +12,8 @@
   lineinfile:
     path: "{{ item.path }}"
     create: false
-    regexp: gpgcheck=
-    line: gpgcheck=1
+    regexp: 'gpgcheck='
+    line: 'gpgcheck=1'
   with_items: "{{ yum_repo.files }}"
   tags:
     - "1.2.2"
@@ -22,7 +22,7 @@
   lineinfile:
     path: /etc/yum.conf
     create: false
-    regexp: gpgcheck=
-    line: gpgcheck=1
+    regexp: 'gpgcheck='
+    line: 'gpgcheck=1'
   tags:
     - "1.2.2"
