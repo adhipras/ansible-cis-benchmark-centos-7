@@ -1,16 +1,13 @@
 ---
 # Section 1.5.1 Ensuring bootloader password is set, skipped.
 
-- name: Ensuring permissions on bootloader configuration files are set properly
+- name: Ensuring permissions on bootloader configuration file is set properly
   file:
-    path: "{{ item }}"
+    path: /boot/grub2/grub.cfg
     state: file
     owner: root
     group: root
     mode: 0600
-  with_items:
-    - /boot/grub2/grub.cfg
-    - /boot/grub2/user.cfg
   tags:
     - "1.5.2"
 
@@ -18,7 +15,7 @@
   replace:
     dest: /usr/lib/systemd/system/{{ item }}.service
     regexp: '^ExecStart=-((?!/usr/lib/systemd/systemd-sulogin-shell).)*$'
-    replace: "ExecStart=-/usr/lib/systemd/systemd-sulogin-shell {{ item }}"
+    replace: 'ExecStart=-/usr/lib/systemd/systemd-sulogin-shell {{ item }}'
   with_items:
     - rescue
     - emergency
