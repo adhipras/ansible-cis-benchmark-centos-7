@@ -1,6 +1,6 @@
 # Ansible CIS Benchmark for CentOS Linux 7
 
-[Ansible](https://www.ansible.com/) role for auditing and hardening [CentOS Linux](https://www.centos.org/) 7 Vagrant VM (virtual machine) based on the [Center for Internet Security (CIS)](https://www.cisecurity.org/) [Benchmark](https://www.cisecurity.org/benchmark/centos_linux/).
+[Ansible](https://www.ansible.com/) role for auditing and hardening [CentOS Linux](https://www.centos.org/) 7 [Vagrant](https://www.vagrantup.com/) virtual machine based on the [Center for Internet Security (CIS)](https://www.cisecurity.org/) [Benchmark](https://www.cisecurity.org/benchmark/centos_linux/).
 
 ## Prerequisites
 
@@ -27,4 +27,4 @@ $ vagrant up
 
 ## Disclaimer
 
-There are some sections I didn't include because I think it would be better to be handled manually, such as disk partition.
+There are some sections I skipped because I thought it would be better to be handled manually, for example: disk partitioning.
