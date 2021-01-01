@@ -10,3 +10,7 @@
 - name: 5.3. Configure PAM
   include_tasks: configure-pam.yml
   tags: "5.3"
+
+- name: 5.4. User Accounts and Environment
+  include_tasks: user-accounts-and-environment.yml
+  tags: "5.4"
