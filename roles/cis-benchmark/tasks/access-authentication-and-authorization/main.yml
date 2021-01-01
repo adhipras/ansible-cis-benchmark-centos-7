@@ -14,3 +14,18 @@
 - name: 5.4. User Accounts and Environment
   include_tasks: user-accounts-and-environment.yml
   tags: "5.4"
+
+# Section 5.5 Ensure root login is restricted to system console, skipped.
+
+- name: 5.6. Ensure Access To The Su Command Is Restricted
+  group:
+    name: sugroup
+    state: present
+  tags: "5.6"
+
+- name: 5.6. Ensure Access To The Su Command Is Restricted (Cont'd)
+  lineinfile:
+    path: /etc/pam.d/su
+    regexp: '^#auth(.*)required(.*)$'
+    line: 'auth            required        pam_wheel.so use_uid group=sugroup'
+  tags: "5.6"
