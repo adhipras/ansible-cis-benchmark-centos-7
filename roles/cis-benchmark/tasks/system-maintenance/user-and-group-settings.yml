@@ -1,0 +1,44 @@
+---
+- name: Ensuring accounts in /etc/passwd use shadowed passwords
+  command: sed -e 's/^\([a-zA-Z0-9_]*\):[^:]*:/\1:x:/' -i /etc/passwd
+  args:
+    warn: no
+  tags:
+    - "6.2.1"
+
+# Section 6.2.2 Ensure /etc/shadow password fields are not empty, skipped.
+# Section 6.2.3 Ensure root is the only UID 0 account, skipped.
+# Section 6.2.4 Ensure root PATH Integrity, skipped.
+# Section 6.2.5 Ensure all users' home directories exist, skipped.
+# Section 6.2.6 Ensure users' home directories permissions are 750 or more restrictive, skipped.
+# Section 6.2.7 Ensure users own their home directories, skipped.
+# Section 6.2.8 Ensure users' dot files are not group or world writable, skipped.
+
+- name: Getting the list of dotfiles from users' home directories
+  find:
+    paths: /home
+    file_type: file
+    patterns: '.forward,.netrc,.rhosts'
+  register: dot
+  tags:
+    - "6.2.9"
+    - "6.2.10"
+    - "6.2.12"
+
+- name: Ensuring no users have the .forward, .netrc, and .rhosts dotfiles
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ dot.files }}"
+  tags:
+    - "6.2.9"
+    - "6.2.10"
+    - "6.2.12"
+
+# Section 6.2.11 Ensure users' .netrc Files are not group or world accessible, skipped.
+# Section 6.2.13 Ensure all groups in /etc/passwd exist in /etc/group, skipped.
+# Section 6.2.14 Ensure no duplicate UIDs exist, skipped.
+# Section 6.2.15 Ensure no duplicate GIDs exist, skipped.
+# Section 6.2.16 Ensure no duplicate user names exist, skipped.
+# Section 6.2.17 Ensure no duplicate group names exist, skipped.
+# Section 6.2.18 Ensure shadow group is empty, skipped.

@@ -2,3 +2,7 @@
 - name: 6.1. System File Permissions
   include_tasks: system-file-permissions.yml
   tags: "6.1"
+
+- name: 6.2. User and Group Settings
+  include_tasks: user-and-group-settings.yml
+  tags: "6.2"
