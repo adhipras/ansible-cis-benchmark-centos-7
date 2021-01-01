@@ -17,8 +17,8 @@
   lineinfile:
     path: "{{ item }}"
     create: false
-    regexp: '^auth        required      pam_faillock.so'
-    insertafter: '^auth        required      pam_env.so'
+    regexp: '^auth(.*)required(.*)pam_faillock.so'
+    insertafter: '^auth(.*)required(.*)pam_env.so'
     line: 'auth        required      pam_faillock.so preauth silent audit deny=5 unlock_time=900'
   with_items:
     - /etc/pam.d/system-auth
@@ -30,8 +30,8 @@
   lineinfile:
     path: "{{ item }}"
     create: false
-    regexp: '^auth        \[default=die\] pam_faillock.so'
-    insertbefore: '^auth        requisite     pam_succeed_if.so(.*)$'
+    regexp: '^auth(.*)\[default=die\](.*)pam_faillock.so'
+    insertbefore: '^auth(.*)requisite(.*)pam_succeed_if.so(.*)$'
     line: 'auth        [default=die] pam_faillock.so authfail audit deny=5 unlock_time=900'
   with_items:
     - /etc/pam.d/system-auth
@@ -43,8 +43,8 @@
   lineinfile:
     path: "{{ item }}"
     create: false
-    regexp: '^account     required      pam_faillock.so'
-    insertbefore: '^account     required      pam_unix.so'
+    regexp: '^account(.*)required(.*)pam_faillock.so'
+    insertbefore: '^account(.*)required(.*)pam_unix.so'
     line: 'account     required      pam_faillock.so'
   with_items:
     - /etc/pam.d/system-auth
@@ -56,7 +56,7 @@
   lineinfile:
     path: "{{ item }}"
     create: false
-    regexp: '^password    sufficient    pam_unix.so(.*)$'
+    regexp: '^password(.*)sufficient(.*)pam_unix.so(.*)$'
     line: 'password    sufficient    pam_unix.so sha512 shadow nullok try_first_pass remember=5 use_authtok'
   with_items:
     - /etc/pam.d/password-auth
