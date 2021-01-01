@@ -1,1 +1,4 @@
 ---
+- name: 6.1. System File Permissions
+  include_tasks: system-file-permissions.yml
+  tags: "6.1"
