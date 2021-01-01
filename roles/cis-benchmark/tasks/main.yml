@@ -23,3 +23,7 @@
 - name: 5. Access, Authentication, and Authorization
   include_tasks: access-authentication-and-authorization/main.yml
   tags: "5"
+
+- name: 6. System Maintenance
+  include_tasks: system-maintenance/main.yml
+  tags: "6"
